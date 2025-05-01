@@ -41,7 +41,6 @@ class BPETokenizer:
         self.vocab = {f"{a}{b}": i for i, (a, b) in enumerate(self.merges)}
 
     def tokenize(self, text):
-        """Tokenizes input text using trained BPE merges."""
         words = text.split()
         tokenized_text = []
         
@@ -78,6 +77,7 @@ class BPETokenizer:
             self.merges = data["merges"]
 
 
+
 eng = BPETokenizer(vocab_size=200)
 de = BPETokenizer(vocab_size=200)
 de_eng = BPETokenizer(vocab_size=400)
@@ -85,27 +85,13 @@ with open("../data/german.txt", "r") as f:
     german = f.read()
 with open("../data/english.txt", "r") as f:
     english = f.read()
-try:
-    with open("german_bpe.json", "r") as f:
-        de.load_vocab("german_bpe.json")
-except FileNotFoundError:
-    print("German BPE vocab not found, training new model.")
-    de.train(german)
-    de.save_vocab("german_bpe.json")
-try:
-    with open("english_bpe.json", "r") as f:
-        eng.load_vocab("english_bpe.json")
-except FileNotFoundError:
-    print("English BPE vocab not found, training new model.")
-    eng.train(english)
-    eng.save_vocab("english_bpe.json")
-try:
-    with open("german_english_bpe.json", "r") as f:
-        de_eng.load_vocab("german_english_bpe.json")
-except FileNotFoundError:
-    print("German-English BPE vocab not found, training new model.")
-    de_eng.train(german + english)
-    de_eng.save_vocab("german_english_bpe.json")
+
+de.train(german)
+de.save_vocab("german_bpe.json")
+eng.train(english)
+eng.save_vocab("english_bpe.json")
+de_eng.train(german + english)
+de_eng.save_vocab("german_english_bpe.json")
 
 while True:
     print("Enter 'exit' to quit.")

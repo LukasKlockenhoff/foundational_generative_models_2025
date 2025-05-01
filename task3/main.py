@@ -15,35 +15,20 @@ nltk.download('punkt')
 
 
 def split_sentences(text: str) -> List[str]:
-    """
-    Zerlegt einen langen Text in eine Liste von Sätzen.
-    """
     sentences = nltk.tokenize.sent_tokenize(text, language='german')
     return sentences
 
 
 def compute_tfidf_embeddings(sentences: List[str]) -> np.ndarray:
-    """
-    Erzeugt TF-IDF Vektoren für eine Liste von Sätzen.
-    Rückgabe: (n_sentences, n_features)
-    """
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(sentences)
-    # In dense Form zurückgeben
     return tfidf_matrix.toarray()
 
 
 def compute_sentence_transformer_embeddings(sentences: List[str], model_name: str = 'all-MiniLM-L6-v2') -> np.ndarray:
-    """
-    Erzeugt Embeddings mittels Sentence-Transformers.
-    Rückgabe: (n_sentences, dim)
-    """
     model = SentenceTransformer(model_name)
     embeddings = model.encode(sentences, convert_to_numpy=True, normalize_embeddings=True)
     return embeddings
-
-
-# Part (b): Graph-Bau und TextRank
 
 def build_similarity_graph(embeddings: np.ndarray, threshold: float = None) -> nx.Graph:
     n = embeddings.shape[0]
@@ -63,9 +48,7 @@ def build_similarity_graph(embeddings: np.ndarray, threshold: float = None) -> n
 
 
 def text_rank(graph: nx.Graph, top_n: int = 5) -> List[Tuple[int, float]]:
-    # PageRank mit Kantengewichten
     scores = nx.pagerank(graph, weight='weight')
-    # Sortieren nach Score
     ranked = sorted(scores.items(), key=lambda item: item[1], reverse=True)
     return ranked[:top_n]
 
@@ -73,7 +56,7 @@ def text_rank(graph: nx.Graph, top_n: int = 5) -> List[Tuple[int, float]]:
 def analyze_graph_structure(G):
     n = G.number_of_nodes()
     m = G.number_of_edges()
-    density = nx.density(G)  # 2m / (n*(n-1))
+    density = nx.density(G) # Where is the graph between unconnected and complete?
     avg_deg = sum(dict(G.degree()).values()) / n
     num_components = nx.number_connected_components(G)
     avg_clustering = nx.average_clustering(G, weight='weight')
@@ -134,13 +117,11 @@ if __name__ == '__main__':
     model_name = 'all-MiniLM-L6-v2' # "sentence-transformers/distiluse-base-multilingual-cased-v1"
     st_emb = compute_sentence_transformer_embeddings(sentences, model_name=model_name)
 
-    # b) Graph für TF-IDF
-    G_tfidf = build_similarity_graph(tfidf_emb, threshold=0.1)
-    top_tfidf = text_rank(G_tfidf, top_n=5)
+    Graph_tfidf = build_similarity_graph(tfidf_emb, threshold=0.1)
+    top_tfidf = text_rank(Graph_tfidf, top_n=5)
 
-    # b) Graph für Sentence-Transformer
-    G_st = build_similarity_graph(st_emb, threshold=0.2)
-    top_st = text_rank(G_st, top_n=5)
+    Graph_st = build_similarity_graph(st_emb, threshold=0.2)
+    top_st = text_rank(Graph_st, top_n=5)
 
     print("Top Sätze (TF-IDF):")
     for idx, score in top_tfidf:
@@ -150,9 +131,8 @@ if __name__ == '__main__':
     for idx, score in top_st:
         print(f"[{idx}] {score:.4f} - {sentences[idx]}")
 
-
-
     # Graph-Analyse
+    # output ist schon einmal komplett in der analyse.txt
 
     # print("\nGraph-Analyse (TF-IDF):")
     # analyze_graph_structure(G_tfidf)

@@ -133,20 +133,20 @@ if __name__ == '__main__':
     args = sys.argv
     if len(args) > 1 and args[1] not in ['-g', '-t']:
         print("Word Vector Calculator")
-        print("Usage: python word_calculator.py [-g <glove_path> <embeddings_dim>] | [-t <transformer_model>]")
-        print("Default usage: python word_calculator.py")
+        print("Usage: python main.py [-g <glove_path> <embeddings_dim>] | [-t <transformer_model>]")
+        print("Default usage: python main.py")
         print("Default usage: uses transformer model 'all-MiniLM-L6-v2'")
         sys.exit(1)
     if len(args) > 1 and args[1] == '-g':
         if len(args) < 4:
-            print("Usage: python word_calculator.py -g <glove_path> <embeddings_dim>")
+            print("Usage: python main.py -g <glove_path> <embeddings_dim>")
             sys.exit(1)
         glove_path = args[2]
         embedding_dim = int(args[3])
         calc = GloveCalculator(glove_path, embedding_dim)
     elif len(args) > 1 and args[1] == '-t':
         if len(args) < 3:
-            print("Usage: python word_calculator.py -t <transformer_model>")
+            print("Usage: python main.py -t <transformer_model>")
             sys.exit(1)
         transformer_model = args[2]
         calc = TransformerWordCalculator(transformer_model)
