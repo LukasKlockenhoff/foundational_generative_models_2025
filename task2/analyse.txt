@@ -1,7 +1,28 @@
 WICHTIG:
 DIE GLOVE DATEIEN SIND ZU GROSS FÜR GITHUB. DESHALB HABE ICH DIESE DATEIEN NICHT HIER.
 
-b) Es ist nicht leicht zu quantifizieren, aber ich habe das Gefühl, dass das System mit GloVe eher das Rechenergebnis liefert, das ich erwarte. Oft ist bei dem Embeddingsystem das Problem, dass das Ergebnis zu nah an einem der beteiligten Wörtern ist. z.B. 'Instagram - pictures + hate' ergibt 'hatred', 'hates', ... Ergebnisse die auch irgendwie Sinn machen aber nicht das sind, was erwartet wäre. GloVe gibt Twitter als eines der ersten Ergebnisse zurück. Allerdings kann das SentenceTransformer Modell auch mit mehrteiligen Begriffen umgehen, die in GloVe nicht gegeben sind. Mit einem Entsprechenden Wörterbuch funktioniert auch das Embeddingsystem wie erwartet. D.h. wenn man das Model aus einigen Ausgewählten Wörtern auswählen lässt. In dieser Implementierung hab ich mich aber in einer späteren Interation dafür entschieden das Vokabular vom Model selbst erstellen zu lassen um mehr Flexibilität mit den Rechnungen zu haben.
+b) Ich habe das Gefühl, dass das System mit GloVe eher das Rechenergebnis liefert, das ich erwarte. Oft ist bei dem Embeddingsystem das Problem, dass das Ergebnis zu nah an einem der beteiligten Wörtern ist. z.B. 'Instagram - pictures + hate' ergibt 'hatred', 'hates', ... Ergebnisse die auch irgendwie Sinn machen aber nicht das sind, was erwartet wäre. GloVe gibt Twitter als eines der ersten Ergebnisse zurück. Allerdings kann das SentenceTransformer Modell auch mit mehrteiligen Begriffen umgehen, die in GloVe nicht gegeben sind. Mit einem Entsprechenden Wörterbuch funktioniert auch das Embeddingsystem wie erwartet. D.h. wenn man das Model aus einigen Ausgewählten Wörtern auswählen lässt. In dieser Implementierung hab ich mich aber in einer späteren Interation dafür entschieden das Vokabular vom Model selbst erstellen zu lassen um mehr Flexibilität mit den Rechnungen zu haben.
+
+>>> instagram - pictures + hate Erwartet Twitter
+GLOVE
+[('anti-gay', 0.4614977240562439), ('hatred', 0.42266151309013367), ('formspring', 0.42164409160614014), ('tumblr', 0.40673840045928955), ('twitter', 0.3918251395225525)]
+
+Transformer
+[('hating', 0.6687299013137817), ('hatred', 0.605401873588562), ('hated', 0.5944628715515137), ('hates', 0.5861058235168457), ('dislike', 0.5597039461135864)]
+
+>>> good + good Erwartet better
+GLOVE
+[('better', 0.7659584283828735), ('really', 0.736107587814331), ('always', 0.717353880405426), ('you', 0.7073799967765808), ('well', 0.7045711874961853)]
+
+Transformer
+[('excellent', 0.7517588138580322), ('great', 0.7270901799201965), ('nice', 0.6404545307159424), ('well', 0.6303505301475525), ('fine', 0.6158231496810913)]
+
+>>> queen - woman + man Erwartet King
+GLOVE
+[('king', 0.6552621126174927), ('ii', 0.5050469040870667), ('prince', 0.491478830575943), ('majesty', 0.48908835649490356), ('monarch', 0.47834303975105286)]
+
+Transformer
+[('lord', 0.5398653149604797), ('queens', 0.5292607545852661), ('king', 0.5249866247177124), ('lad', 0.5169179439544678), ('mans', 0.5145256519317627)]
 
 c) Für sinnvoll halte ich Plus und Minus Operation. Auch wenn man Vektoren Multiplizieren kann. Das Kreuzprodukt bildet aber einen Vektor, der Orthogonal zu den beiden Anderen steht und sich somit potentiell eher vom Sinnzusammenhang entfernt. Rein von der Wortbedeutung her macht es Sinn 'Weiblichkeit' oder 'Adel' zu addieren um aus 'Mensch' 'Königin' zu machen aber Multiplizieren oder Dividieren macht keinen Sinn. Interessant wäre eventuell noch mit Skalaren zu multiplizieren. Also das vielfache von 'gut' oder 'schlecht' zu nehmen. 
 
