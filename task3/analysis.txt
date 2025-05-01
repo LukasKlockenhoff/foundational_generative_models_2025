@@ -1,0 +1,148 @@
+# Analyse (Teilaufgabe c)
+
+Ich habe die Graphen mit den drei verschiedenen Modellen (TF-IDF, MiniLM-V6 und Distiluse) analysiert. Dabei habe ich die wichtigsten Sätze und Knoten identifiziert, sowie einige statistische Kennzahlen berechnet. Die Analyse zeigt, dass TF-IDF im gegensatz zu den Modellen eine wesentlich weniger dichte Struktur im Graphen aufweist. Aufgrund von TF-IDFs Fokus auf Worthäufigkeiten sind auch die 'wichtigsten' Sätze die, mit den meisten Wörtern, vielen 'the', 'and' 'a' etc. Die Modelle zeigen deutlich dichtere Graphen, höhere Grade der Knoten und vor allem beim MiniLM-V6 Modell große Communities. Es lässt sich darauf schließen, dass die Modelle in der Lage sind, semantische Beziehungen zwischen den Sätzen zu erkennen und zu nutzen, während TF-IDF nur auf der Häufigkeit von Wörtern basiert. Die Qualität einer Zusammenfassung für den Textausschnitt aus "1984" von George Orwell aus 5 Sätzen ist bei allen Varianten nicht fantastisch, aber die Modelle sind in der Lage, die wichtigsten Sätze zu identifizieren und eine gewisse Kohärenz zu erzeugen. Chat-GPT wählt im Vergleich die folgenden Sätze aus:
+
+“It was a bright cold day in April, and the clocks were striking thirteen.”
+
+“BIG BROTHER IS WATCHING YOU, the caption beneath it ran.”
+
+“The instrument (the telescreen, it was called) could be dimmed, but there was no way of shutting it off completely.”
+
+“The thing that he was about to do was to open a diary.”
+
+“His pen had slid voluptuously over the smooth paper, printing in large neat capitals – DOWN WITH BIG BROTHER DOWN WITH BIG BROTHER DOWN WITH BIG BROTHER DOWN WITH BIG BROTHER DOWN WITH BIG BROTHER over and over again, filling half a page.”
+
+Häufig sind das interessanter Weise Randsätze von Paragraphen. Evtl. vermutet das Modell, so gleichmäßig aus dem Text zu wählen und jeden Paragraphen zu berücksichtigen. Unten die Werte der Analyse:
+
+## Top 5 Sentences
+### TF-IDF
+[220] 0.0121 - And yet the very next instant he was at one with the people about him, and all that was said of Goldstein seemed to him to be true.
+[188] 0.0107 - He was abusing Big Brother, he was denouncing the dictatorship of the Party, he was demanding the immediate conclusion of peace with Eurasia, he was advocating freedom of speech, freedom of the Press, freedom of assembly, freedom of thought, he was crying hysterically that the revolution had been betrayed -- and all this in rapid polysyllabic speech which was a sort of parody of the habitual style of the orators of the Party, and even contained Newspeak words: more Newspeak words, indeed, than any Party member would normally use in real life.
+[80] 0.0098 - It was partly the unusual geography of the room that had suggested to him the thing that he was now about to do.
+[122] 0.0097 - He was conscious of nothing except the blankness of the page in front of him, the itching of the skin above his ankle, the blaring of the music, and a slight booziness caused by the gin.
+[138] 0.0093 - It was nearly eleven hundred, and in the Records Department, where Winston worked, they were dragging the chairs out of the cubicles and grouping them in the centre of the hall opposite the big telescreen, in preparation for the Two Minutes Hate.
+
+### MiniLM-V6
+[254] 0.0065 - But there was a space of a couple of seconds during which the expression of his eyes might conceivably have betrayed him.
+[122] 0.0060 - He was conscious of nothing except the blankness of the page in front of him, the itching of the skin above his ankle, the blaring of the music, and a slight booziness caused by the gin.
+[278] 0.0059 - For a second, two seconds, they had exchanged an equivocal glance, and that was the end of the story.
+[102] 0.0058 - A sense of complete helplessness had descended upon him.
+[117] 0.0058 - All he had to do was to transfer to paper the interminable restless monologue that had been running inside his head, literally for years.
+
+### Distiluse
+[303] 0.0070 - For a moment he was seized by a kind of hysteria.
+[259] 0.0067 - But there was a fraction of a second when their eyes met, and for as long as it took to happen Winston knew-yes, he knew!-that O'Brien was thinking the same thing as himself.
+[78] 0.0062 - By sitting in the alcove, and keeping well back, Winston was able to remain outside the range of the telescreen, so far as sight went.
+[165] 0.0060 - And again, perhaps it was not even unorthodoxy that was written in his face, but simply intelligence.
+[135] 0.0059 - But the curious thing was that while he was doing so a totally different memory had clarified itself in his mind, to the point where he almost felt equal to writing it down.
+
+
+## Graph-Analyse 
+
+### Stats
+
+TF-IDF:
+Nodes: 313
+Edges: 4282
+Density: 0.0877
+Avg. degree: 27.36
+Connected components: 5
+Avg. clustering coeff.: 0.0519
+
+MiniLM-V6:
+Nodes: 313
+Edges: 17126
+Density: 0.3507
+Avg. degree: 109.43
+Connected components: 1
+Avg. clustering coeff.: 0.1669
+
+Distiluse (Semantic Model):
+Nodes: 313
+Edges: 5318
+Density: 0.1089
+Avg. degree: 33.98
+Connected components: 1
+Avg. clustering coeff.: 0.1029
+
+
+### Top 5 nodes by PageRank:
+
+TF-IDF:
+Node 220: 0.0121
+Node 188: 0.0107
+Node 80: 0.0098
+Node 122: 0.0097
+Node 138: 0.0093
+
+MiniLM-V6:
+Node 254: 0.0065
+Node 122: 0.0060
+Node 278: 0.0059
+Node 102: 0.0058
+Node 117: 0.0058
+
+Distiluse:
+Node 303: 0.0070
+Node 259: 0.0067
+Node 78: 0.0062
+Node 165: 0.0060
+Node 135: 0.0059
+
+
+### Top 5 nodes by Betweenness Centrality:
+
+TF-IDF
+Node 220: 0.0368
+Node 188: 0.0355
+Node 64: 0.0301
+Node 133: 0.0273
+Node 122: 0.0197
+
+MiniLM-V6
+Node 212: 0.0112
+Node 137: 0.0099
+Node 121: 0.0076
+Node 64: 0.0063
+Node 44: 0.0059
+
+Distiluse
+Node 232: 0.0164
+Node 159: 0.0146
+Node 98: 0.0132
+Node 303: 0.0131
+Node 259: 0.0127
+
+### Top 5 nodes by Closeness Centrality:
+
+TF-IDF:
+Node 188: 0.5950
+Node 220: 0.5915
+Node 122: 0.5726
+Node 80: 0.5715
+Node 64: 0.5705
+
+MiniLM-V6:
+Node 254: 0.7761
+Node 278: 0.7573
+Node 122: 0.7500
+Node 102: 0.7464
+Node 117: 0.7429
+
+Distiluse:
+Node 259: 0.5632
+Node 303: 0.5571
+Node 159: 0.5483
+Node 155: 0.5417
+Node 31: 0.5407
+
+### Communities:
+
+TF-IDF:
+Found 10 communities, sizes: [100, 84, 59, 26, 23, 17, 1, 1, 1, 1]
+
+MiniLM-V6:
+Found 3 communities, sizes: [158, 153, 2]
+
+Distiluse:
+Found 4 communities, sizes: [119, 118, 44, 32]

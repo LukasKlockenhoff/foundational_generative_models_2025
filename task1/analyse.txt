@@ -1,0 +1,37 @@
+# Analyse der Tokenizer mit je Vokabular von 200 Tokens
+
+## Vollständig Bekannter Satz in Englisch
+
+Wie zu erwarten, war hier der Englische Tokenizer sehr effizient mit nur 19 Tokens für den Satz. Der deutsche Tokenizer hat 25 Tokens benötigt. Der gemischte Tokenizer hat auch 19 gebraucht. Vor allem vermutlich, weil das Wort 'was' und die Silbe 'er' in beiden Sprachen häufig vorkommen. Interessanterweise hat der gemischte Tokenizer 'on' als zusammenhängendes Token gelernt aber der englische Tokenizer nicht. Das könnte aber auf die doppelte Menge an Trainingstext zurückzuführen sein, da das on alleine im deutschen Text 175 mal auftaucht. Mit dem veralteten Wort 'thy' kommt der Deutsche Tokenizer garnicht zurecht (zu erwarten). Der Englische hat dieses Wort als ganzes zu einem Token zusammengefasst und der gemischte Tokenizer hat es in 2 Token zerlegt.
+
+There was a bitter taste on thy lips.
+German BPE Tokenization: ['T h er e</w>', 'was</w>', 'a </w>', 'b i t ter</w>', 't a st e</w>', 'o n</w>', 't h y </w>', 'l i p s .</w>']
+English BPE Tokenization: ['Th er e</w>', 'was</w>', 'a</w>', 'b it t er</w>', 't a st e</w>', 'o n</w>', 'thy</w>', 'li p s.</w>']
+German-English BPE Tokenization: ['Th er e</w>', 'was</w>', 'a</w>', 'b i t ter</w>', 't a st e</w>', 'on</w>', 'th y</w>', 'li p s.</w>']
+
+## Vollständig Bekannter Satz in Deutsch
+
+Es war ein bitterer Geschmack auf deinen Lippen.
+German BPE Tokenization: ['Es</w>', 'w a r</w>', 'ei n</w>', 'b i tt er er</w>', 'G e sch m a ck </w>', 'auf</w>', 'd einen</w>', 'L i p p en.</w>']
+
+English BPE Tokenization: ['E s</w>', 'w ar </w>', 'e in </w>', 'b it ter er</w>', 'G es ch m a c k</w>', 'a u f</w>', 'd e in en</w>', 'L i pp en .</w>']
+
+German-English BPE Tokenization: ['Es</w>', 'wa r</w>', 'ei n</w>', 'b i t ter er</w>', 'G es ch ma ck </w>', 'auf</w>', 'd einen</w>', 'L i pp en.</w>']
+
+## Unbekannter Satz in Deutsch
+
+Das Wort 'bin' taucht im Text 36 mal auf. Ich bin deswegen ein wenig überrascht, dass der Tokenizer es nicht zusammengefügt hat. Der gemische Tokenizer hat 'ter' gelernt, wie der Englische, aber nicht 'in' aus 'bin'. Sondern verwendet 'ei', wie der deutsche Tokenizer. Das hängt evtl. mit der Reihenfolge zusammen in der der Tokenizer die bein Texte lernt.
+
+Enter a sentence to tokenize: Luke, ich bin dein Vater.
+German BPE Tokenization: ['L u k e,</w>', 'ich</w>', 'b i n</w>', 'd ei n</w>', 'V a t er.</w>']
+English BPE Tokenization: ['L u k e,</w>', 'i ch</w>', 'b in </w>', 'd e in </w>', 'V a ter .</w>']
+German-English BPE Tokenization: ['L u k e,</w>', 'ich</w>', 'b i n</w>', 'd ei n</w>', 'V a ter .</w>']
+
+## Unbekannter Satz in Englisch
+
+Auffallend hier ist, dass der Name Luke im Trainingstext nicht vorkommt, English ist, aber ein K enthällt, was untypisch in der Englischen Sprache ist und dadurch 4 Token benötigt werden. Das 'am' wurde nur im Englischen Tokenizer zusammengefügt und das 'you'. Der gemische Tokenizer hat das 'th' gelernt hat aber nicht das 'you' zusammengefügt.
+
+Enter a sentence to tokenize: Luke, I am your father!
+German BPE Tokenization: ['L u k e,</w>', 'I </w>', 'a m</w>', 'y o u r</w>', 'f a t h er !</w>']
+English BPE Tokenization: ['L u k e,</w>', 'I</w>', 'am</w>', 'you r</w>', 'f a th er !</w>']
+German-English BPE Tokenization: ['L u k e,</w>', 'I</w>', 'a m</w>', 'y ou r</w>', 'f a th er !</w>']
